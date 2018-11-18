@@ -11,3 +11,4 @@ You must not intend to use non-default splitting column, nor impose any conditio
 SYNTAX
 ------
 sqoop import-all-tables (generic-args) (import-args)
+sqoop-import-all-tables (generic-args) (import-args)
