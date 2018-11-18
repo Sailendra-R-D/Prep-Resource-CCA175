@@ -1,0 +1,4 @@
+Define in Hive a table named emps with a definition based on a database table named employees:
+
+$ sqoop create-hive-table --connect jdbc:mysql://db.example.com/corp \
+    --table employees --hive-table emps
