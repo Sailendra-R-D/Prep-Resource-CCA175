@@ -6,3 +6,6 @@
 --lines-terminated-by <char>        Sets the end-of-line character
 --mysql-delimiters                  Uses MySQL’s default delimiter set: fields: , lines: \n escaped-by: \ optionally-enclosed-by: '
 --optionally-enclosed-by <char>     Sets a field enclosing character
+
+Do not use enclosed-by or escaped-by delimiters with output formatting arguments used to import to Hive. 
+Hive cannot currently parse them.
