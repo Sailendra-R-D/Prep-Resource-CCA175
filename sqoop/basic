@@ -1,0 +1,8 @@
+sqoop help
+
+sqoop <command> \
+  --connect <connection-string> \
+  --username <user-name> \
+  --password <password> \
+  [command-related-args]
+
