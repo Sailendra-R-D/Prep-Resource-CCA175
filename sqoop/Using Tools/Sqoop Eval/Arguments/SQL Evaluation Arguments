@@ -1,0 +1,3 @@
+   Argument                      Description
+-----------                   ------------------------
+-e,--query <statement>        Execute statement in SQL.
