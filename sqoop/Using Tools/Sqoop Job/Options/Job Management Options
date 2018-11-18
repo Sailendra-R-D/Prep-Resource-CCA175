@@ -1,0 +1,39 @@
+   Argument                   Description
+-----------                 --------------
+--create <job-id>           Define a new saved job with the specified job-id (name). A second Sqoop command-line, separated by a -- should be specified; this defines the saved job.
+--delete <job-id>           Delete a saved job.
+--exec <job-id>	            Given a job defined with --create, run the saved job.
+--show <job-id>             Show the parameters for a saved job.
+--list                      List all saved jobs
+
+Creating saved jobs is done with the --create action. This operation requires a -- followed by a tool name and its arguments. The tool and its arguments will form the basis of the saved job. Consider:
+
+$ sqoop job --create myjob -- import --connect jdbc:mysql://example.com/db \
+    --table mytable
+This creates a job named myjob which can be executed later. The job is not run. This job is now available in the list of saved jobs:
+
+$ sqoop job --list
+Available jobs:
+  myjob
+We can inspect the configuration of a job with the show action:
+
+ $ sqoop job --show myjob
+ Job: myjob
+ Tool: import
+ Options:
+ ----------------------------
+ direct.import = false
+ codegen.input.delimiters.record = 0
+ hdfs.append.dir = false
+ db.table = mytable
+ ...
+And if we are satisfied with it, we can run the job with exec:
+
+$ sqoop job --exec myjob
+10/08/19 13:08:45 INFO tool.CodeGenTool: Beginning code generation
+...
+The exec action allows you to override arguments of the saved job by supplying them after a --. For example, if the database were changed to require a username, we could specify the username and password with:
+
+$ sqoop job --exec myjob -- --username someuser -P
+Enter password:
+...
