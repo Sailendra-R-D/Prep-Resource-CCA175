@@ -1,3 +1,9 @@
    Argument                        Description
 -----------                     --------------
 --meta-connect <jdbc-uri>       Specifies the JDBC connect string used to connect to the metastore
+
+By default, a private metastore is instantiated in $HOME/.sqoop. If you have configured a hosted metastore with the sqoop-metastore tool, you can connect to it by specifying the --meta-connect argument. This is a JDBC connect string just like the ones used to connect to databases for import.
+
+In conf/sqoop-site.xml, you can configure sqoop.metastore.client.autoconnect.url with this address, so you do not have to supply --meta-connect to use a remote metastore. This parameter can also be modified to move the private metastore to a location on your filesystem other than your home directory.
+
+If you configure sqoop.metastore.client.enable.autoconnect with the value false, then you must explicitly supply --meta-connect.
