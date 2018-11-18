@@ -7,3 +7,4 @@ Records can be stored as text files (one record per line), or in binary represen
 SYNTAX
 ------
 sqoop import (generic-args) (import-args)
+sqoop-import (generic-args) (import-args)
