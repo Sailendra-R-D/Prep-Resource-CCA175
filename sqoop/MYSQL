@@ -1,0 +1,28 @@
+MySQL
+24.2.1. zeroDateTimeBehavior
+24.2.2. UNSIGNED columns
+24.2.3. BLOB and CLOB columns
+24.2.4. Importing views in direct mode
+
+MySQL v5.0 and above offers very thorough coverage by Sqoop. Sqoop has been tested with mysql-connector-java-5.1.13-bin.jar.
+
+24.2.1. zeroDateTimeBehavior
+MySQL allows values of '0000-00-00\' for DATE columns, which is a non-standard extension to SQL. When communicated via JDBC, these values are handled in one of three different ways:
+
+Convert to NULL.
+Throw an exception in the client.
+Round to the nearest legal date ('0001-01-01\').
+You specify the behavior by using the zeroDateTimeBehavior property of the connect string. If a zeroDateTimeBehavior property is not specified, Sqoop uses the convertToNull behavior.
+
+You can override this behavior. For example:
+
+$ sqoop import --table foo \
+    --connect jdbc:mysql://db.example.com/someDb?zeroDateTimeBehavior=round
+24.2.2. UNSIGNED columns
+Columns with type UNSIGNED in MySQL can hold values between 0 and 2^32 (4294967295), but the database will report the data type to Sqoop as INTEGER, which will can hold values between -2147483648 and \+2147483647. Sqoop cannot currently import UNSIGNED values above 2147483647.
+
+24.2.3. BLOB and CLOB columns
+Sqoop’s direct mode does not support imports of BLOB, CLOB, or LONGVARBINARY columns. Use JDBC-based imports for these columns; do not supply the --direct argument to the import tool.
+
+24.2.4. Importing views in direct mode
+Sqoop is currently not supporting import from view in direct mode. Use JDBC based (non direct) mode in case that you need to import view (simply omit --direct parameter).
