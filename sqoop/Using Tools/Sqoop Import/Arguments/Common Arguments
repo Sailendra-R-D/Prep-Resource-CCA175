@@ -12,7 +12,3 @@
 --verbose                                          Print more information while working
 --connection-param-file <filename>                 Optional properties file that provides connection parameters
 --relaxed-isolation                                Set connection transaction isolation to read uncommitted for the mappers.
-
-sqoop import \
-    --connect jdbc:mysql://database.example.com/employees \
-    --username luffy -P onePiece
