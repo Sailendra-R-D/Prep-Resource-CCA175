@@ -1,0 +1,15 @@
+   Argument                                     Description
+-----------                                 ---------------
+--columns <col,col,col…>                    Columns to export to table
+--direct                                    Use direct export fast path
+--export-dir <dir>                          HDFS source path for the export
+-m,--num-mappers <n>                        Use n map tasks to export in parallel
+--table <table-name>                        Table to populate
+--call <stored-proc-name>                   Stored Procedure to call
+--update-key <col-name>                     Anchor column to use for updates. Use a comma separated list of columns if there are more than one column.
+--update-mode <mode>                        Specify how updates are performed when new rows are found with non-matching keys in database.Legal values for mode include updateonly (default) and allowinsert.
+--input-null-string <null-string>           The string to be interpreted as null for string columns
+--input-null-non-string <null-string>       The string to be interpreted as null for non-string columns
+--staging-table <staging-table-name>        The table in which data will be staged before being inserted into the destination table.
+--clear-staging-table                       Indicates that any data present in the staging table can be deleted.
+--batch                                     Use batch mode for underlying statement execution.
