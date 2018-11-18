@@ -1,0 +1,8 @@
+   Argument                      Description
+-----------                   --------------
+--class-name <class>          Specify the name of the record-specific class to use during the merge job.
+--jar-file <file>             Specify the name of the jar to load the record class from.
+--merge-key <col>             Specify the name of a column to use as the merge key.
+--new-data <path>             Specify the path of the newer dataset.
+--onto <path>                 Specify the path of the older dataset.
+--target-dir <path>           Specify the target path for the output of the merge job.
