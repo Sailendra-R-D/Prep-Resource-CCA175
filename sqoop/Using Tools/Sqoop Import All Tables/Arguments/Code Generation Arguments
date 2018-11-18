@@ -1,0 +1,21 @@
+<table summary="Code generation arguments:" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; "><colgroup><col align="left"><col align="left"></colgroup><thead><tr><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">
+    Argument
+    </th><th style="border-bottom: 0.5pt solid ; " align="left">
+    Description
+    </th></tr></thead><tbody><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">
+    <code class="literal">--bindir &lt;dir&gt;</code>
+    </td><td style="border-bottom: 0.5pt solid ; " align="left">
+    Output directory for compiled objects
+    </td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">
+    <code class="literal">--jar-file &lt;file&gt;</code>
+    </td><td style="border-bottom: 0.5pt solid ; " align="left">
+    Disable code generation; use specified jar
+    </td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">
+    <code class="literal">--outdir &lt;dir&gt;</code>
+    </td><td style="border-bottom: 0.5pt solid ; " align="left">
+    Output directory for generated code
+    </td></tr><tr><td style="border-right: 0.5pt solid ; " align="left">
+    <code class="literal">--package-name &lt;name&gt;</code>
+    </td><td style="" align="left">
+    Put auto-generated classes in this package
+    </td></tr></tbody></table>
