@@ -1,0 +1,61 @@
+he following examples illustrate how to use the import tool in a variety of situations.
+
+A basic import of a table named EMPLOYEES in the corp database:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp --table EMPLOYEES
+A basic import requiring a login:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp --table EMPLOYEES \
+    --username SomeUser -P
+Enter password: (hidden)
+Selecting specific columns from the EMPLOYEES table:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp --table EMPLOYEES \
+    --columns "employee_id,first_name,last_name,job_title"
+Controlling the import parallelism (using 8 parallel tasks):
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp --table EMPLOYEES \
+    -m 8
+Storing data in SequenceFiles, and setting the generated class name to com.foocorp.Employee:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp --table EMPLOYEES \
+    --class-name com.foocorp.Employee --as-sequencefile
+Specifying the delimiters to use in a text-mode import:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp --table EMPLOYEES \
+    --fields-terminated-by '\t' --lines-terminated-by '\n' \
+    --optionally-enclosed-by '\"'
+Importing the data to Hive:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp --table EMPLOYEES \
+    --hive-import
+Importing only new employees:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp --table EMPLOYEES \
+    --where "start_date > '2010-01-01'"
+Changing the splitting column from the default:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp --table EMPLOYEES \
+    --split-by dept_id
+Verifying that an import was successful:
+
+$ hadoop fs -ls EMPLOYEES
+Found 5 items
+drwxr-xr-x   - someuser somegrp          0 2010-04-27 16:40 /user/someuser/EMPLOYEES/_logs
+-rw-r--r--   1 someuser somegrp    2913511 2010-04-27 16:40 /user/someuser/EMPLOYEES/part-m-00000
+-rw-r--r--   1 someuser somegrp    1683938 2010-04-27 16:40 /user/someuser/EMPLOYEES/part-m-00001
+-rw-r--r--   1 someuser somegrp    7245839 2010-04-27 16:40 /user/someuser/EMPLOYEES/part-m-00002
+-rw-r--r--   1 someuser somegrp    7842523 2010-04-27 16:40 /user/someuser/EMPLOYEES/part-m-00003
+
+$ hadoop fs -cat EMPLOYEES/part-m-00000 | head -n 10
+0,joe,smith,engineering
+1,jane,doe,marketing
+...
+Performing an incremental import of new data, after having already imported the first 100,000 rows of a table:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/somedb --table sometable \
+    --where "id > 100000" --target-dir /incremental_dataset --append
+An import of a table named EMPLOYEES in the corp database that uses validation to validate the import using the table row count and number of rows copied into HDFS: More Details
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp \
+    --table EMPLOYEES --validate
