@@ -1,0 +1,4 @@
+Recreate the record interpretation code for the employees table of a corporate database:
+
+sqoop codegen --connect jdbc:mysql://db.example.com/corp \
+    --table employees
