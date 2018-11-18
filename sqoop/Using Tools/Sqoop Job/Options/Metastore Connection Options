@@ -1,0 +1,3 @@
+   Argument                        Description
+-----------                     --------------
+--meta-connect <jdbc-uri>       Specifies the JDBC connect string used to connect to the metastore
