@@ -1,0 +1,27 @@
+PURPOSE
+-------
+The metastore tool configures Sqoop to host a shared metadata repository. Multiple users and/or remote users can define and execute saved jobs (created with sqoop job) defined in this metastore.
+
+Clients must be configured to connect to the metastore in sqoop-site.xml or with the --meta-connect argument.
+
+SYNTAX
+------
+sqoop metastore (generic-args) (metastore-args)
+sqoop-metastore (generic-args) (metastore-args)
+
+Metastore management options
+----------------------------
+
+   Argument            Description
+----------          --------------
+--shutdown          Shuts down a running metastore instance on the same machine.
+
+Running sqoop-metastore launches a shared HSQLDB database instance on the current machine. Clients can connect to this metastore and create jobs which can be shared between users for execution.
+
+The location of the metastore’s files on disk is controlled by the sqoop.metastore.server.location property in conf/sqoop-site.xml. This should point to a directory on the local filesystem.
+
+The metastore is available over TCP/IP. The port is controlled by the sqoop.metastore.server.port configuration parameter, and defaults to 16000.
+
+Clients should connect to the metastore by specifying sqoop.metastore.client.autoconnect.url or --meta-connect with the value jdbc:hsqldb:hsql://<server-name>:<port>/sqoop. For example, jdbc:hsqldb:hsql://metaserver.example.com:16000/sqoop.
+
+This metastore may be hosted on a machine within the Hadoop cluster, or elsewhere on the network.
