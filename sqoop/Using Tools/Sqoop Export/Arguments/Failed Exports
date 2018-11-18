@@ -1,0 +1,8 @@
+Exports may fail for a number of reasons:
+
+Loss of connectivity from the Hadoop cluster to the database (either due to hardware fault, or server software crashes)
+Attempting to INSERT a row which violates a consistency constraint (for example, inserting a duplicate primary key value)
+Attempting to parse an incomplete or malformed record from the HDFS source data
+Attempting to parse records using incorrect delimiters
+Capacity issues (such as insufficient RAM or disk space)
+If an export map task fails due to these or other reasons, it will cause the export job to fail. The results of a failed export are undefined. Each export map task operates in a separate transaction. Furthermore, individual map tasks commit their current transaction periodically. If a task fails, the current transaction will be rolled back. Any previously-committed transactions will remain durable in the database, leading to a partially-complete export.
