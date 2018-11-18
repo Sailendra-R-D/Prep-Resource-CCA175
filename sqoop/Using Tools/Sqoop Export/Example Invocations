@@ -1,0 +1,16 @@
+A basic export to populate a table named bar:
+
+$ sqoop export --connect jdbc:mysql://db.example.com/foo --table bar  \
+    --export-dir /results/bar_data
+This example takes the files in /results/bar_data and injects their contents in to the bar table in the foo database on db.example.com. The target table must already exist in the database. Sqoop performs a set of INSERT INTO operations, without regard for existing content. If Sqoop attempts to insert rows which violate constraints in the database (for example, a particular primary key value already exists), then the export fails.
+
+Alternatively, you can specify the columns to be exported by providing --columns "col1,col2,col3". Please note that columns that are not included in the --columns parameter need to have either defined default value or allow NULL values. Otherwise your database will reject the imported data which in turn will make Sqoop job fail.
+
+Another basic export to populate a table named bar with validation enabled: More Details
+
+$ sqoop export --connect jdbc:mysql://db.example.com/foo --table bar  \
+    --export-dir /results/bar_data --validate
+An export that calls a stored procedure named barproc for every record in /results/bar_data would look like:
+
+$ sqoop export --connect jdbc:mysql://db.example.com/foo --call barproc \
+    --export-dir /results/bar_data
