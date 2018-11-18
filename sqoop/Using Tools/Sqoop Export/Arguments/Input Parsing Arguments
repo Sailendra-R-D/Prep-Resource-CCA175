@@ -1,0 +1,7 @@
+   Argument                                    Description
+-----------                                 ---------------
+--input-enclosed-by <char>                  Sets a required field encloser
+--input-escaped-by <char>                   Sets the input escape character
+--input-fields-terminated-by <char>         Sets the input field separator
+--input-lines-terminated-by <char>          Sets the input end-of-line character
+--input-optionally-enclosed-by <char>       Sets a field enclosing character
