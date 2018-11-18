@@ -1,0 +1,10 @@
+PURPOSE
+-------
+The job tool allows you to create and work with saved jobs. Saved jobs remember the parameters used to specify a job, so they can be re-executed by invoking the job by its handle.
+
+If a saved job is configured to perform an incremental import, state regarding the most recently imported rows is updated in the saved job to allow the job to continually import only the newest rows.
+
+SYNTAX
+------
+sqoop job (generic-args) (job-args) [-- [subtool-name] (subtool-args)]
+sqoop-job (generic-args) (job-args) [-- [subtool-name] (subtool-args)]
