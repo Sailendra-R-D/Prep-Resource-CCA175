@@ -1,0 +1,8 @@
+PURPOSE
+-------
+List database schemas present on a server.
+
+SYNTAX
+------
+sqoop list-databases (generic-args) (list-databases-args)
+sqoop-list-databases (generic-args) (list-databases-args)
