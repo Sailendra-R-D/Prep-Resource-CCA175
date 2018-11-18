@@ -1,0 +1,6 @@
+Exports are performed by multiple writers in parallel. Each writer uses a separate connection to the database; these have separate transactions from one another. 
+Sqoop uses the multi-row INSERT syntax to insert up to 100 records per statement. 
+Every 100 statements, the current transaction within a writer task is committed, causing a commit every 10,000 rows. 
+This ensures that transaction buffers do not grow without bound, and cause out-of-memory conditions. 
+Therefore, an export is not an atomic process. 
+Partial results from the export will become visible before the export is complete.
