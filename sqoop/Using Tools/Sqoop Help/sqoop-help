@@ -1,0 +1,8 @@
+PURPOSE
+-------
+List tools available in Sqoop and explain their usage.
+
+SYNTAX
+------
+sqoop help [tool-name]
+sqoop-help [tool-name]
