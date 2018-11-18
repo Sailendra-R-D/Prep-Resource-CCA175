@@ -1,0 +1,8 @@
+   Argument                           Description
+------------                         -------------
+--enclosed-by <char>                Sets a required field enclosing character
+--escaped-by <char>                 Sets the escape character
+--fields-terminated-by <char>       Sets the field separator character
+--lines-terminated-by <char>        Sets the end-of-line character
+--mysql-delimiters                  Uses MySQL’s default delimiter set: fields: , lines: \n escaped-by: \ optionally-enclosed-by: '
+--optionally-enclosed-by <char>     Sets a field enclosing character
