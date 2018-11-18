@@ -35,8 +35,8 @@ Validation arguments
 
    Argument	                                       Description
 ---------------------------------------         --------------------------------------------
---validate	                                       Enable validation of data copied, supports single table copy only.
---validator <class-name>	                        Specify validator class to use.
---validation-threshold <class-name>	               Specify validation threshold class to use.
---validation-failurehandler <class-name>	         Specify validation failure handler class to use.
+--validate                                         Enable validation of data copied, supports single table copy only.
+--validator <class-name>                           Specify validator class to use.
+--validation-threshold <class-name>                Specify validation threshold class to use.
+--validation-failurehandler <class-name>           Specify validation failure handler class to use.
 
