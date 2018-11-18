@@ -1,0 +1,54 @@
+   Argument                           Description
+------------                         -------------
+--enclosed-by <char>                Sets a required field enclosing character
+--escaped-by <char>                 Sets the escape character
+--fields-terminated-by <char>       Sets the field separator character
+--lines-terminated-by <char>        Sets the end-of-line character
+--mysql-delimiters                  Uses MySQL’s default delimiter set: fields: , lines: \n escaped-by: \ optionally-enclosed-by: '
+--optionally-enclosed-by <char>     Sets a field enclosing character
+
+When importing to delimited files, the choice of delimiter is important. Delimiters which appear inside string-based fields may cause ambiguous parsing of the imported data by subsequent analysis passes. For example, the string "Hello, pleased to meet you" should not be imported with the end-of-field delimiter set to a comma.
+
+Delimiters may be specified as:
+
+a character (--fields-terminated-by X)
+an escape character (--fields-terminated-by \t). Supported escape characters are:
+
+\b (backspace)
+\n (newline)
+\r (carriage return)
+\t (tab)
+\" (double-quote)
+\\' (single-quote)
+\\ (backslash)
+\0 (NUL) - This will insert NUL characters between fields or lines, or will disable enclosing/escaping if used for one of the --enclosed-by, --optionally-enclosed-by, or --escaped-by arguments.
+The octal representation of a UTF-8 character’s code point. This should be of the form \0ooo, where ooo is the octal value. For example, --fields-terminated-by \001 would yield the ^A character.
+The hexadecimal representation of a UTF-8 character’s code point. This should be of the form \0xhhh, where hhh is the hex value. For example, --fields-terminated-by \0x10 would yield the carriage return character.
+The default delimiters are a comma (,) for fields, a newline (\n) for records, no quote character, and no escape character. Note that this can lead to ambiguous/unparsible records if you import database records containing commas or newlines in the field data. For unambiguous parsing, both must be enabled. For example, via --mysql-delimiters.
+
+If unambiguous delimiters cannot be presented, then use enclosing and escaping characters. The combination of (optional) enclosing and escaping characters will allow unambiguous parsing of lines. For example, suppose one column of a dataset contained the following values:
+
+Some string, with a comma.
+Another "string with quotes"
+The following arguments would provide delimiters which can be unambiguously parsed:
+
+$ sqoop import --fields-terminated-by , --escaped-by \\ --enclosed-by '\"' ...
+(Note that to prevent the shell from mangling the enclosing character, we have enclosed that argument itself in single-quotes.)
+
+The result of the above arguments applied to the above dataset would be:
+
+"Some string, with a comma.","1","2","3"...
+"Another \"string with quotes\"","4","5","6"...
+Here the imported strings are shown in the context of additional columns ("1","2","3", etc.) to demonstrate the full effect of enclosing and escaping. The enclosing character is only strictly necessary when delimiter characters appear in the imported text. The enclosing character can therefore be specified as optional:
+
+$ sqoop import --optionally-enclosed-by '\"' (the rest as above)...
+Which would result in the following import:
+
+"Some string, with a comma.",1,2,3...
+"Another \"string with quotes\"",4,5,6...
+[Note]	Note
+Even though Hive supports escaping characters, it does not handle escaping of new-line character. Also, it does not support the notion of enclosing characters that may include field delimiters in the enclosed string. It is therefore recommended that you choose unambiguous field and record-terminating delimiters without the help of escaping and enclosing characters when working with Hive; this is due to limitations of Hive’s input parsing abilities.
+
+The --mysql-delimiters argument is a shorthand argument which uses the default delimiters for the mysqldump program. If you use the mysqldump delimiters in conjunction with a direct-mode import (with --direct), very fast imports can be achieved.
+
+While the choice of delimiters is most important for a text-mode import, it is still relevant if you import to SequenceFiles with --as-sequencefile. The generated class' toString() method will use the delimiters you specify, so subsequent formatting of the output data will rely on the delimiters you choose.
