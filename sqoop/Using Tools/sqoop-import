@@ -1,0 +1,42 @@
+Purpose
+-------
+The import tool imports an individual table from an RDBMS to HDFS. 
+Each row from a table is represented as a separate record in HDFS. 
+Records can be stored as text files (one record per line), or in binary representation as Avro or SequenceFiles.
+
+Syntax
+------
+sqoop import (generic-args) (import-args)
+
+Common arguments
+----------------
+
+   Argument	                                       Description
+---------------------------------               ----------------------------------------------
+--connect <jdbc-uri>	                           Specify JDBC connect string
+--connection-manager <class-name>	               Specify connection manager class to use
+--driver <class-name>	                           Manually specify JDBC driver class to use
+--hadoop-mapred-home <dir>	                     Override $HADOOP_MAPRED_HOME
+--help	                                         Print usage instructions
+--password-file	                                 Set path for a file containing the authentication password
+-P	                                             Read password from console
+--password <password>	                           Set authentication password
+--username <username>	                           Set authentication username
+--verbose	                                       Print more information while working
+--connection-param-file <filename>	             Optional properties file that provides connection parameters
+--relaxed-isolation	                             Set connection transaction isolation to read uncommitted for the mappers.
+
+sqoop import \
+    --connect jdbc:mysql://database.example.com/employees \
+    --username luffy -P onePiece
+
+Validation arguments
+--------------------
+
+   Argument	                                       Description
+---------------------------------------         --------------------------------------------
+--validate	                                     Enable validation of data copied, supports single table copy only.
+--validator <class-name>	                       Specify validator class to use.
+--validation-threshold <class-name>	             Specify validation threshold class to use.
+--validation-failurehandler <class-name>	       Specify validation failure handler class to use.
+
