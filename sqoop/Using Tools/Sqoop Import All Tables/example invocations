@@ -1,0 +1,11 @@
+Import all tables from the corp database:
+
+$ sqoop import-all-tables --connect jdbc:mysql://db.foo.com/corp
+Verifying that it worked:
+
+$ hadoop fs -ls
+Found 4 items
+drwxr-xr-x   - someuser somegrp       0 2010-04-27 17:15 /user/someuser/EMPLOYEES
+drwxr-xr-x   - someuser somegrp       0 2010-04-27 17:15 /user/someuser/PAYCHECKS
+drwxr-xr-x   - someuser somegrp       0 2010-04-27 17:15 /user/someuser/DEPARTMENTS
+drwxr-xr-x   - someuser somegrp       0 2010-04-27 17:15 /user/someuser/OFFICE_SUPPLIES
