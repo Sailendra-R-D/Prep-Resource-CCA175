@@ -1,0 +1,5 @@
+Incremental imports are performed by comparing the values in a check column against a reference value for the most recent import. 
+For example, if the --incremental append argument was specified, along with --check-column id and --last-value 100, all rows with id > 100 will be imported. 
+If an incremental import is run from the command line, the value which should be specified as --last-value in a subsequent incremental import will be printed to the screen for your reference. 
+If an incremental import is run from a saved job, this value will be retained in the saved job. 
+Subsequent runs of sqoop job --exec someIncrementalJob will continue to import only newer rows than those previously imported.
