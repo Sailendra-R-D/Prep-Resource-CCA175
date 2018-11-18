@@ -1,0 +1,5 @@
+List database schemas available on a MySQL server:
+
+$ sqoop list-databases --connect jdbc:mysql://database.example.com/
+information_schema
+employees
