@@ -1,0 +1,5 @@
+PURPOSE
+-------
+The merge tool allows you to combine two datasets where entries in one dataset should overwrite entries of an older dataset. 
+For example, an incremental import run in last-modified mode will generate multiple datasets in HDFS where successively newer data appears in each dataset. 
+The merge tool will "flatten" two datasets into one, taking the newest available records for each primary key.
