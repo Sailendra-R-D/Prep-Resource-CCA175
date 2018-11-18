@@ -1,0 +1,4 @@
+   Argument          Description
+-----------       --------------
+--help            Print usage instructions
+--verbose         Print more information while working
