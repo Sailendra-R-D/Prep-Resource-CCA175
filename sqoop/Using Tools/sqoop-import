@@ -1,15 +1,14 @@
-Purpose
+PURPOSE
 -------
 The import tool imports an individual table from an RDBMS to HDFS. 
 Each row from a table is represented as a separate record in HDFS. 
 Records can be stored as text files (one record per line), or in binary representation as Avro or SequenceFiles.
 
-Syntax
+SYNTAX
 ------
 sqoop import (generic-args) (import-args)
 
-Common arguments
-----------------
+**COMMON ARGUMENTS**
 
    Argument	                                       Description
 ---------------------------------               ----------------------------------------------
@@ -30,8 +29,7 @@ sqoop import \
     --connect jdbc:mysql://database.example.com/employees \
     --username luffy -P onePiece
 
-Validation arguments
---------------------
+**VALIDATION ARGUMENTS**
 
    Argument	                                       Description
 ---------------------------------------         --------------------------------------------
