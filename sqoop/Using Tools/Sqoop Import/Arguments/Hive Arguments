@@ -3,7 +3,7 @@
 --hive-home <dir>             Override $HIVE_HOME
 --hive-import                 Import tables into Hive (Uses Hive’s default delimiters if none are set.)
 --hive-overwrite              Overwrite existing data in the Hive table.
---create-hive-table           If set, then the job will fail if the target hive	table exits. By default this property is false.
+--create-hive-table           If set, then the job will fail if the target hive table exits. By default this property is false.
 --hive-table <table-name>     Sets the table name to use when importing to Hive.
 --hive-drop-import-delims     Drops \n, \r, and \01 from string fields when importing to Hive.
 --hive-delims-replacement     Replace \n, \r, and \01 from string fields with user defined string when importing to Hive.
