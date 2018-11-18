@@ -1,0 +1,8 @@
+Select ten records from the employees table:
+
+$ sqoop eval --connect jdbc:mysql://db.example.com/corp \
+    --query "SELECT * FROM employees LIMIT 10"
+Insert a row into the foo table:
+
+$ sqoop eval --connect jdbc:mysql://db.example.com/corp \
+    -e "INSERT INTO foo VALUES(42, 'bar')"
