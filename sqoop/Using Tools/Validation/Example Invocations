@@ -1,0 +1,16 @@
+A basic import of a table named EMPLOYEES in the corp database that uses validation to validate the row counts:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp  \
+    --table EMPLOYEES --validate
+A basic export to populate a table named bar with validation enabled:
+
+$ sqoop export --connect jdbc:mysql://db.example.com/foo --table bar  \
+    --export-dir /results/bar_data --validate
+Another example that overrides the validation args:
+
+$ sqoop import --connect jdbc:mysql://db.foo.com/corp --table EMPLOYEES \
+    --validate --validator org.apache.sqoop.validation.RowCountValidator \
+    --validation-threshold \
+          org.apache.sqoop.validation.AbsoluteValidationThreshold \
+    --validation-failurehandler \
+          org.apache.sqoop.validation.AbortOnFailureHandler
