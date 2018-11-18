@@ -1,0 +1,8 @@
+PURPOSE
+-------
+List tables present in a database.
+
+SYNTAX
+------
+sqoop list-tables (generic-args) (list-tables-args)
+sqoop-list-tables (generic-args) (list-tables-args)
