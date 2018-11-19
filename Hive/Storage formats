@@ -1,0 +1,34 @@
+   Storage Format                      Description
+-----------------                   --------------
+STORED BY                           Stored by a non-native table format. 
+                                    To create or link to a non-native table, for example a table backed by HBase or Druid or Accumulo.
+	                                  See StorageHandlers for more information on this option.
+                                    
+STORED AS TEXTFILE                  Stored as plain text files. 
+                                    TEXTFILE is the default file format, unless the configuration parameter hive.default.fileformat has a 
+                                    different setting.Use the DELIMITED clause to read delimited files.
+                                    Enable escaping for the delimiter characters by using the 'ESCAPED BY' clause (such as ESCAPED BY '\')
+                                    Escaping is needed if you want to work with data that can contain these delimiter characters.
+                                    A custom NULL format can also be specified using the 'NULL DEFINED AS' clause (default is '\N').
+                                    
+STORED AS SEQUENCEFILE              Stored as compressed Sequence File.
+
+STORED AS RCFILE                    Stored as Record Columnar File format.
+
+STORED AS PARQUET                   Stored as Parquet format for the Parquet columnar storage format in Hive 0.13.0 and later;
+                                    Use ROW FORMAT SERDE ... STORED AS INPUTFORMAT ... OUTPUTFORMAT syntax ... in Hive 0.10, 0.11, or 0.12.
+                                    
+STORED AS ORC                       Stored as ORC file format. Supports ACID Transactions & Cost-based Optimizer (CBO). Stores column-level metadata.
+
+STORED AS JSONFILE                  Stored as Json file format in Hive 4.0.0 and later.
+
+STORED AS AVRO                      Stored as Avro format in Hive 0.14.0 and later (see Avro SerDe).
+
+INPUTFORMAT and OUTPUTFORMAT        in the file_format to specify the name of a corresponding InputFormat and OutputFormat class as a string literal.
+                                    For example, 'org.apache.hadoop.hive.contrib.fileformat.base64.Base64TextInputFormat'.
+
+                                    For LZO compression, the values to use are
+                                    'INPUTFORMAT "com.hadoop.mapred.DeprecatedLzoTextInputFormat"
+                                    OUTPUTFORMAT "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"'
+
+                                    (see LZO Compression).
