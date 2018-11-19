@@ -4,7 +4,10 @@
 - 19-11-2018 Added Hive notes(w.r.t `1.2.1000.2.6.5.0-292`)
 
 <p align="center">
-  <img src="https://github.com/Sailendra-R-D/CCA-175-Prep-Resource/blob/master/Hadoop.jpg" width="350">
-  <img src="https://github.com/Sailendra-R-D/CCA-175-Prep-Resource/blob/master/spark-logo-trademark.png" width="350">
+  <img src="https://github.com/Sailendra-R-D/CCA-175-Prep-Resource/blob/master/python-img.jpg" width="350">
+   <img src="https://github.com/Sailendra-R-D/CCA-175-Prep-Resource/blob/master/scala-img.png" width="350">
+</p>
+<p>
+  <img src="https://github.com/Sailendra-R-D/CCA-175-Prep-Resource/blob/master/spark-img.png" width="700">
 </p>
 
