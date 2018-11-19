@@ -8,6 +8,6 @@
    <img src="https://github.com/Sailendra-R-D/CCA-175-Prep-Resource/blob/master/scala-img.jpg" width="350">
 </p>
 <p>
-  <img src="https://github.com/Sailendra-R-D/CCA-175-Prep-Resource/blob/master/spark-img.png" width="350" align="center">
+  <img src="https://github.com/Sailendra-R-D/CCA-175-Prep-Resource/blob/master/spark-img.png" width="350" style="float:center;">
 </p>
 
