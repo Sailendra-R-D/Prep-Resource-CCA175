@@ -1,5 +1,5 @@
-   Description	Command
---------------
+   Description                                           Command
+--------------                                        ----------
 Autocomplete                                          hive> Press Tab key
                                                       Display all 436 possibilities? (y or n)
                                                       If you enter y, you’ll get a long list of all the keywords
