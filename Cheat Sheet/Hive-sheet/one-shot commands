@@ -1,0 +1,30 @@
+   Description                                                     Command
+--------------                                                  ----------
+To Print Current DB in use                                      $hive --hiveconf hive.cli.print.current.db=true
+
+Specify a file of commands for the CLI to run as it starts, 
+before showing you the prompt                                   $cat hiveproperties.txt
+                                                                set hive.cli.print.current.db=true;
+                                                                set system:user.name;
+	
+                                                                $ hive -i hiveproperties.txt
+                                                                system:user.name=dc-user
+                                                                hive (default)>
+                                                                
+Adding the -e execute Hive queries                              $hive -e "SELECT * FROM mytable LIMIT 3";
+
+Adding the -S for silent mode removes the OK and Time 
+taken … lines, as well as other                                 $hive -S -e "SELECT * FROM mytable LIMIT 3"
+inessential output
+
+Useful trick for finding a property name that you 
+can’t quite remember                                            $hive -S -e "set" | grep warehouse_or_pattern
+Comments in Hive Scripts. Hive scripts have the extension .hql  $cat hivescript.hql
+                                                                -- Comment line1
+                                                                -- Comment line2
+                                                                SELECT * FROM mytable LIMIT 3;
+                                                                
+Executing Hive Queries from Files                               $hive -f /unix-path/to/file/hivescript.hql
+
+Hive variables (The env namespace is useful as an 
+alternative way to pass variable definitions to Hive)           $YEAR=2012 hive -e "SELECT * FROM mytable WHERE year = ${env:YEAR}";
