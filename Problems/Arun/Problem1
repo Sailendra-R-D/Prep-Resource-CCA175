@@ -64,4 +64,124 @@ sqoop import \
   
   var joinedOrderDataDF = ordersDF.join(orderItemDF,ordersDF("order_id")===orderItemDF("order_item_order_id"))
   
+  //data frame result
   
+  var dataFrameResult = joinedOrderDataDF.
+                        groupBy(to_date(from_unixtime(col("order_date")/1000)).alias("order_formatted_date"),col("order_status")).
+                        agg(round(sum("order_item_subtotal"),2).alias("total_amount"),countDistinct("order_id").alias("total_orders")).
+                        orderBy(col("order_formatted_date").desc,col("order_status"),col("total_amount").desc,col("total_orders"));
+ 
+  dataFrameResult.show();
+
+  // RDD result
+  
+  var comByKeyResult = joinedOrderDataDF.
+                        map(x=> ((x(1).toString,x(3).toString),(x(8).toString.toFloat,x(0).toString))).
+                        combineByKey((x:(Float, String))=>(x._1,Set(x._2)),
+                        (x:(Float,Set[String]),y:(Float,String))=>(x._1 + y._1,x._2+y._2),
+                        (x:(Float,Set[String]),y:(Float,Set[String]))=>(x._1+y._1,x._2++y._2)).
+                        map(x=> (x._1._1,x._1._2,x._2._1,x._2._2.size)).
+                        toDF().
+                        orderBy(col("_1").desc,col("_2"),col("_3").desc,col("_4"));
+                        
+  comByKeyResult.show();
+  
+  // spark sql filter
+  
+  joinedOrderDataDF.registerTempTable("order_joined");
+
+  var sqlResult = sqlContext.sql("select to_date(from_unixtime(cast(order_date/1000 as bigint))) as order_formatted_date, 
+                                    order_status, cast(sum(order_item_subtotal) as DECIMAL (10,2)) as total_amount, 
+                                    count(distinct(order_id)) as total_orders 
+                                  from order_joined 
+                                  group by to_date(from_unixtime(cast(order_date/1000 as bigint))), 
+                                    order_status order by order_formatted_date desc,order_status,total_amount desc, total_orders");
+  
+    sqlResult.show();
+  
+  //pyspark -shell
+  
+    pyspark --master yarn --jars /home/cloudera/Downloads/spark-avro_2.10-2.0.1.jar
+
+    order_df = sqlContext.read. \
+    format("com.databricks.spark.avro"). \
+    load("/user/cloudera/problem1/orders")
+
+    order_df.show()
+
+    order_item_df = sqlContext.read. \
+    format("com.databricks.spark.avro"). \
+    load("/user/cloudera/problem1/order-items")
+
+    order_item_df.show()
+
+    joined_df = order_df. \
+    join(order_item_df, order_df.order_id == order_item_df.order_item_order_id)
+
+    from pyspark.sql.functions import *
+
+    result_df = joined_df. \
+    groupby(to_date(from_unixtime(col("order_date")/1000)).alias("order_date"), col("order_status")). \
+    agg(countDistinct(col("order_id")).alias("total_orders"), round(sum(col("order_item_subtotal")), 2).alias("total_amount")). \
+    orderBy(col("order_date").desc(), col("order_status"),col("total_amount").desc(), col("total_orders"))
+
+    result_df.show()
+
+    joined_df.registerTempTable("joined_table")
+
+    sqlContext.sql("select * from joined_table limit 10").show()
+
+    result_sql = sqlContext. \
+    sql("select to_date(from_unixtime(cast(order_date/1000 as int))) as formatted_order_date, \
+    order_status, round(sum(order_item_subtotal) ,2) as total_amount, \
+    count(distinct(order_id)) as total_orders from joined_table \
+    group by order_date, order_status \
+    order by formatted_order_date desc, order_status, total_amount desc, total_orders")
+
+    result_sql.show()
+
+    result_rdd = joined_df. \
+    map(lambda x : ((x[1], str(x[3])), (float(x[8]), int(x[0])))). \
+    combineByKey(
+    lambda x : (x[0], set([x[1]])), 
+    lambda x, y : (x[0] + y[0], x[1] | set([y[1]])),
+    lambda x, y : (x[0] + y[0], x[1] | y[1])). \
+    map(lambda x :(x[0][0], x[0][1], x[1][0], len(x[1][1]))). \
+    toDF().orderBy(col("_1").desc(), col("_2"), col("_3").desc(), col("_4"))
+
+    result_rdd.show()
+    
+   //save as parquet files and compression codec -gzip
+   
+    sqlContext.setConf("spark.sql.parquet.compression.codec","gzip");
+    dataFrameResult.write.parquet("/user/cloudera/problem1/result4a-gzip");
+    sqlResult.write.parquet("/user/cloudera/problem1/result4b-gzip");
+    comByKeyResult.write.parquet("/user/cloudera/problem1/result4c-gzip");
+    
+    //save as parguet files and compression codec -snappy
+    
+      sqlContext.setConf("spark.sql.parquet.compression.codec","snappy");
+      dataFrameResult.write.parquet("/user/cloudera/problem1/result4a-snappy");
+      sqlResult.write.parquet("/user/cloudera/problem1/result4b-snappy");
+      comByKeyResult.write.parquet("/user/cloudera/problem1/result4c-snappy");
+      
+    //save as CSV file and no compression enabled
+    
+      dataFrameResult.map(x=> x(0) + "," + x(1) + "," + x(2) + "," + x(3)).saveAsTextFile("/user/cloudera/problem1/result4a-csv")
+      sqlResult.map(x=> x(0) + "," + x(1) + "," + x(2) + "," + x(3)).saveAsTextFile("/user/cloudera/problem1/result4b-csv")
+      comByKeyResult.map(x=> x(0) + "," + x(1) + "," + x(2) + "," + x(3)).saveAsTextFile("/user/cloudera/problem1/result4c-csv")
+      
+    //load data back to mysql table
+      
+    create table retail_db.result(order_date varchar(255) not null,
+    order_status varchar(255) not null, total_orders int, total_amount numeric, 
+    constraint pk_order_result primary key (order_date,order_status)); 
+    
+    sqoop export \
+      --connect "jdbc:mysql://ip-addr:3306/retail_db" \
+      --username user-name \
+      --password pwd \
+      --table result \
+      --export-dir "/user/cloudera/problem1/result4a-csv" \
+      --columns "order_date,order_status,total_amount,total_orders"
+     
