@@ -1,0 +1,89 @@
+1)Using sqoop copy data available in mysql products table to folder /user/cloudera/products on hdfs as text file.
+  columns should be delimited by pipe '|'
+2)move all the files from /user/cloudera/products folder to /user/cloudera/problem2/products folder
+3)Change permissions of all the files under /user/cloudera/problem2/products such that owner has read,write and execute permissions, group has read and write permissions whereas others have just read and execute permissions
+4)read data in /user/cloudera/problem2/products and do the following operations using 
+  a) dataframes api 
+  b) spark sql 
+  c) RDDs aggregateByKey method. 
+    Your solution should have three sets of steps. Sort the resultant dataset by category id
+      filter such that your RDD\DF has products whose price is lesser than 100 USD
+      on the filtered data set find out the higest value in the product_price column under each category
+      on the filtered data set also find out total products under each category
+      on the filtered data set also find out the average price of the product under each category
+      on the filtered data set also find out the minimum price of the product under each category
+5)store the result in avro file using snappy compression under these folders respectively
+    /user/cloudera/problem2/products/result-df
+    /user/cloudera/problem2/products/result-sql
+    /user/cloudera/problem2/products/result-rdd
+    
+    
+ SOLUTION
+ --------
+ 
+ sqoop import \
+	--connect jdbc:mysql://ip-addr:3306/retail_db \
+	--username user-name \
+	--password pwd \
+	--table products \
+	--target-dir /user/cloudera/products \
+	--delete-target-dir \
+	--fields-terminated-by '|' \
+	--validate
+  
+  //creates directory in HDFS
+  hadoop fs -mkdir /user/cloudera/problem2
+  
+  //moves products dir from source to destination
+  hadoop fs -mv /user/cloudera/products /user/cloudera/problem2/
+  
+  //changes permisisons to (owner RWX(4+2+1) , group RX(4+0+1) , others RX(4+0+1))
+  hadoop fs -chmod 755 /user/cloudera/problem2/products
+  
+  //creates a rdd for products dataset
+  val rdd  = sc.textFile("/user/cloudera/problem2/products")
+  
+  //create a scala class object to hold Product info
+  case class Product(product_id:Int,product_category_id:Int,product_name:String, product_desc:String,product_price:Float,product_image:String)
+  
+  //creates DF on top of RDD
+  val prodDF = rdd.
+                map( line => line.split('|')).
+                map(data => Product(data(0).toInt,data(1).toInt,data(2),data(3),data(4).toFloat,data(5))).
+                toDF
+                
+  //creates a temp table alias to work with spark sql                
+   prodDF.registerTempTable("sproducts")
+  
+  //spark-sql 
+  val filtered = sqlContext.sql("""select product_category_id,max(product_price) as max_price,
+                                      count(distinct(product_id)) as total_products,
+                                      cast(avg(product_price) as decimal(10,2)) as avg_price, 
+                                      min(product_price) as min_price
+                                    from sproducts 
+                                    where product_price < 100
+                                    group by product_category_id
+                                    order by product_category_id desc""")
+  
+  //data frame
+  var dataFrameResult = prodDF.filter("product_price < 100").groupBy(col("product_category_id")).
+  agg(max(col("product_price")).alias("max_price"),countDistinct(col("product_id"))
+  .alias("tot_products"),round(avg(col("product_price")),2).alias("avg_price"),min(col("product_price"))
+  .alias("min_price")).orderBy(col("product_category_id").desc);
+  
+  //rdd aggregate
+  var rddResult = prodDF.
+                    map(x=>(x(1).toString.toInt,x(4).toString.toDouble)).
+                    aggregateByKey((0.0,0.0,0,9999999999999.0))((x,y)=>(math.max(x._1,y),x._2+y,x._3+1,math.min(x._4,y)),(x,y)=>(math.max(x._1,y._1),x._2+y._2,x._3+y._3,math.min(x._4,y._4))).
+                    map(x=> (x._1,x._2._1,(x._2._2/x._2._3),x._2._3,x._2._4))
+                    .sortBy(_._1, false);
+
+  //save result as avro and apply snappy compression 
+  sqlContext.setConf("spark.sql.avro.compression.codec","snappy")
+  //saves DF
+  dataFrameResult.write.avro("/user/cloudera/problem2/products/result-df");
+  //saves temp sql table of DF
+  filtered.write.avro("/user/cloudera/problem2/products/result-sql"); 
+  //saves RDD
+  rddResult.toDF().write.avro("/user/cloudera/problem2/products/result-rdd");
+  
