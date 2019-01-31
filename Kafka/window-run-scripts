@@ -1,0 +1,41 @@
+bin\windows\zookeeper-server-start.sh config\zookeeper.properties
+
+bin\windows\kafka-server-start.bat config\server.properties
+
+
+bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+
+
+bin\windows\kafka-topics.bat --list --zookeeper localhost:2181
+
+
+bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic test
+
+
+bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test --from-beginning
+
+
+copy config\server.properties config\server-1.properties
+
+copy config\server.properties config\server-2.properties
+
+
+bin\windows\kafka-server-start.bat config/server-1.properties &
+
+bin\windows\kafka-server-start.bat config/server-2.properties &
+
+bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 3 --partitions 1 --topic my-replicated-topic
+
+bin\windows\kafka-topics.bat --describe --zookeeper localhost:2181 --topic my-replicated-topic
+
+bin\windows\kafka-topics.bat --describe --zookeeper localhost:2181 --topic test
+
+bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic my-replicated-topic
+
+bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --from-beginning --topic my-replicated-topic
+
+wmic process where "caption = 'java.exe' and commandline like '%server-1.properties%'" get processid
+ProcessId
+
+
+taskkill /pid 4032 /f
